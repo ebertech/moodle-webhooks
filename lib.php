@@ -253,11 +253,11 @@ function local_webhooks_send_request($event, $callback) {
     global $CFG;
 
     $event["host"]  = parse_url($CFG->wwwroot)["host"];
-    $event["token"] = $callback->token;
     $event["extra"] = $callback->other;
 
     $curl = new curl();
     $curl->setHeader(array("Content-Type: application/" . $callback->type));
+    $curl->setHeader(array("Authorization: Bearer " . $callback->token));    
     $curl->post($callback->url, json_encode($event));
     $response = $curl->getResponse();
 
